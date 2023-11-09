@@ -19,9 +19,3 @@ class Person
     @age >= 18
   end
 end
-
-# EX
-mostafa = Person.new(18, 'Mostafa', false)
-puts mostafa.can_use_services? # => true
-jone = Person.new(15, 'Mostafa', false)
-puts jone.can_use_services? # => false
