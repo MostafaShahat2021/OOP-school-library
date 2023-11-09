@@ -17,3 +17,8 @@ class Person
     of_age? || @parent_permission
   end
 end
+
+mostafa = Person.new(18, 'Mostafa', false)
+puts mostafa.can_use_services? # => true
+mostafa_2 = Person.new(15, 'Mostafa', false)
+puts mostafa_2.can_use_services?  # => false
