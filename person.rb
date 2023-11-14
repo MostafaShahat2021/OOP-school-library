@@ -26,6 +26,3 @@ class Person < Nameable
   end
 end
 
-#EX
-mostafa = Person.new(20, 'Mostafa', parent_permission: false)
-puts mostafa.correct_name
