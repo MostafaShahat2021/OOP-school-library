@@ -24,7 +24,7 @@ end
 
 class TrimmerDecorator
   def initialize(nameable)
-    super(nameable)
+    # super(nameable)
     @nameable = nameable
   end
 
