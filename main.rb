@@ -24,7 +24,7 @@ def create_person(app)
   parent_permission = false if %w[N n NO No no].include?(value)
   case option.to_i
   when 1
-    app.create_student(age, name, parent_permission)
+    app.create_student(age, name, parent_permission: parent_permission)
   when 2
     puts 'Specialization:'
     specialization = gets.chomp

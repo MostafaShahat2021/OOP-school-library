@@ -38,7 +38,7 @@ class App
     @books.each.with_index {|book, index| puts "#{index} - #{book.title} by #{book.author}"}
     book_index = gets.chomp.to_i
     puts 'Select a person from the list by number'
-    @peoples.each.with_index {|people, index| puts "#{index} - [#{person.class.name}] Nmae #{person.name} ID #{person.id} Age #{person.age}"}
+    @peoples.each.with_index {|people, index| puts "#{index} - [#{people.class.name}] Nmae #{people.name} ID #{people.id} Age #{people.age}"}
     person_index = gets.chomp.to_i
     puts 'Date: (yyyy-mm-dd)'
     date = gets.chomp
