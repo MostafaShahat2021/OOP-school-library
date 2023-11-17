@@ -63,7 +63,7 @@ def main
     option = gets.chomp.to_i
     if option == '1'
       app.list_all_books
-    elseif option == '2'
+    elsif option == '2'
     app.list_all_peoples
     else
       status = option_handel(option, app)
