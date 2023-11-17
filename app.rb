@@ -15,7 +15,7 @@ class App
 
   def list_all_peoples
     @peoples.each {|people| puts "[#{people.class.name}] Name:- #{people.name} ID:- #{people.id} Age:- #{people.age} \n"}
-  end[]
+  end
 
   def create_teacher(age, specialization, name, parent_permission)
     @peoples << Teacher.new(age, specialization, name: name, parent_permission: parent_permission)
