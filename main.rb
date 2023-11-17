@@ -61,12 +61,26 @@ def main
   while status
     option_list
     option = gets.chomp.to_i
-    if option == '1'
+    case option
+    when 1
       app.list_all_books
-    elsif option == '2'
-    app.list_all_peoples
+    when 2
+      app.list_all_peoples
+    when 3
+      create_person(app)
+    when 4
+      app.create_book
+    when 5
+      app.create_rental
+    when 6
+      puts 'Enter ID:'
+      id = gets.chomp.to_i
+      app.list_rentals(id)
+    when 7
+      puts 'Thanks for using the app!'
+      exit
     else
-      status = option_handel(option, app)
+      puts 'Invalid option'
     end
   end
 end
