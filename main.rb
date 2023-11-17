@@ -23,9 +23,9 @@ def create_person(app)
   value = gets.chomp
   parent_permission = false if %w[N n NO No no].include?(value)
   case option.to_i
-  when '1'
+  when 1
     app.create_student(age, name, parent_permission)
-  when '2'
+  when 2
     puts 'Specialization:'
     specialization = gets.chomp
     app.create_teacher(age, specialization, name, parent_permission)
@@ -36,17 +36,17 @@ end
 
 def option_handel(option, app)
   case option
-  when '3'
+  when 3
     create_person(app)
-  when '4'
+  when 4
     app.create_book
-  when '5'
+  when 5
     app.create_rental
-  when '6'
+  when 6
     puts 'Enter ID:'
     id = gets.chomp.to_i
     app.list_rentals(id)
-  when '7'
+  when 7
     puts 'Thanks for using the app!'
     exit
   else
