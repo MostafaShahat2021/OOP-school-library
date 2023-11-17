@@ -1,7 +1,11 @@
 require_relative 'app'
 
 def option_list
-  puts ''
+  puts '
+  ╦ ╦┌─┐┬  ┌─┐┌─┐┌┬┐┌─┐  ┌┬┐┌─┐  ╔═╗┌─┐┬ ┬┌─┐┌─┐┬    ╦  ┬┌┐ ┬─┐┌─┐┬─┐┬ ┬  ╔═╗┌─┐┌─┐
+  ║║║├┤ │  │  │ ││││├┤    │ │ │  ╚═╗│  ├─┤│ ││ ││    ║  │├┴┐├┬┘├─┤├┬┘└┬┘  ╠═╣├─┘├─┘
+  ╚╩╝└─┘┴─┘└─┘└─┘┴ ┴└─┘   ┴ └─┘  ╚═╝└─┘┴ ┴└─┘└─┘┴─┘  ╩═╝┴└─┘┴└─┴ ┴┴└─ ┴   ╩ ╩┴  ┴  
+  '
   puts '1 - List all books.'
   puts '2 - List all people'
   puts '3 - Create a person'
@@ -77,7 +81,11 @@ def main
       id = gets.chomp.to_i
       app.list_rentals(id)
     when 7
-      puts 'Thanks for using the app!'
+      puts '
+      ╔╗ ┬ ┬┌─┐┬
+      ╠╩╗└┬┘├┤ │
+      ╚═╝ ┴ └─┘o
+      '
       exit
     else
       puts 'Invalid option'
