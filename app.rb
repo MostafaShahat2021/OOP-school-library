@@ -10,11 +10,13 @@ class App
   end
 
   def list_all_books
-    @books.each {|book| puts "Name:- #{book.title} Author:- #{book.author} \n"}
+    @books.each { |book| puts "Name:- #{book.title} Author:- #{book.author} \n" }
   end
 
   def list_all_peoples
-    @peoples.each {|people| puts "[#{people.class.name}] Name:- #{people.name} ID:- #{people.id} Age:- #{people.age} \n"}
+    @peoples.each do |people|
+      puts "[#{people.class.name}] Name:- #{people.name} ID:- #{people.id} Age:- #{people.age} \n"
+    end
   end
 
   def create_teacher(age, specialization, name, parent_permission)
@@ -35,10 +37,12 @@ class App
 
   def create_rental
     puts 'Select a book from the list by number'
-    @books.each.with_index {|book, index| puts "#{index} - #{book.title} by #{book.author}"}
+    @books.each.with_index { |book, index| puts "#{index} - #{book.title} by #{book.author}" }
     book_index = gets.chomp.to_i
     puts 'Select a person from the list by number'
-    @peoples.each.with_index {|people, index| puts "#{index} - [#{people.class.name}] Nmae #{people.name} ID #{people.id} Age #{people.age}"}
+    @peoples.each.with_index do |people, index|
+      puts "#{index} - [#{people.class.name}] Nmae #{people.name} ID #{people.id} Age #{people.age}"
+    end
     person_index = gets.chomp.to_i
     puts 'Date: (yyyy-mm-dd)'
     date = gets.chomp
@@ -49,7 +53,7 @@ class App
     @peoples.each do |people|
       if people.id == person_id
         puts 'Rentals:'
-        people.rentals.each {|rental| puts "Date #{rental.date}, Book #{rental.book.title} by #{rental.book.author}"}
+        people.rentals.each { |rental| puts "Date #{rental.date}, Book #{rental.book.title} by #{rental.book.author}" }
       end
     end
   end
