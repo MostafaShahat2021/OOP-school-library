@@ -7,7 +7,7 @@ class RentalHandler
     @app.create_rental
   end
 
-  def list_rentals(person_id)
+  def list_rentals(_person_id)
     puts 'Enter ID:'
     id = gets.chomp.to_i
     @app.list_rentals(id)

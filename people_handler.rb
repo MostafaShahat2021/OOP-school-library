@@ -36,5 +36,4 @@ class PeopleHandler
   def list_all_peoples
     @app.list_all_peoples
   end
-  
 end
