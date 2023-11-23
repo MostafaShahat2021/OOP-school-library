@@ -49,12 +49,28 @@ class App
     Rental.new(@books[book_index], @peoples[person_index], date)
   end
 
-  def list_rentals(person_id)
-    @peoples.each do |people|
-      if people.id == person_id
+  def list_rentals(person_id = nil)
+    if person_id
+      @peoples.each do |people|
+        next unless people.id == person_id
+
         puts 'Rentals:'
-        people.rentals.each { |rental| puts "Date #{rental.date}, Book #{rental.book.title} by #{rental.book.author}" }
+        people.rentals.each do |rental|
+          puts "Date #{rental.date}, Book #{rental.book.title} by #{rental.book.author}"
+        end
+      end
+    else
+      puts 'Rentals for all people:'
+      @peoples.each do |people|
+        people.rentals.each do |rental|
+          puts "Person ID: #{people.id}, Date #{rental.date}, Book #{rental.book.title} by #{rental.book.author}"
+        end
       end
     end
+  end
+
+  def exit_app
+    puts 'Exiting the application. Goodbye!'
+    exit
   end
 end
