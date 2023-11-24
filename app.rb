@@ -11,6 +11,7 @@ class App
   end
 
   def list_all_books
+    puts @books.inspect
     @books.each { |book| puts "Name:- #{book.title} Author:- #{book.author} \n" }
   end
 
@@ -77,7 +78,7 @@ class App
     load_people_from_json
     load_rentals_from_json
   end
-  
+
   def load_books_from_json
     books_data = JSON.parse(File.read('books.json')) rescue []
     @books = books_data.map { |data| create_book_from_data(data) }
@@ -85,7 +86,7 @@ class App
   
   def create_book_from_data(data)
     Book.new(data['title'], data['author'])
-  end  
+  end
   
   def load_people_from_json
     people_data = JSON.parse(File.read('people.json')) rescue []

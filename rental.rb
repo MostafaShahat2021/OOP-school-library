@@ -8,4 +8,11 @@ class Rental
     @person = person
     person.rentals << self
   end
+  def to_h
+    {
+      'book' => { 'title' => @book.title, 'author' => @book.author },
+      'person_id' => @person.id,
+      'date' => @date
+    }
+  end
 end
