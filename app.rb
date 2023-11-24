@@ -70,7 +70,31 @@ class App
   end
 
   def exit_app
+    save_data_to_json
     puts 'Exiting the application. Goodbye!'
     exit
+  end
+  
+  def save_data_to_json
+    save_books_to_json
+    save_people_to_json
+    save_rentals_to_json
+  end
+  
+  def save_books_to_json
+    books_data = @books.map { |book| { "title" => book.title, "author" => book.author } }
+    File.open('books.json', 'w') { |file| file.write(JSON.generate(books_data)) }
+  end  
+  
+  def save_people_to_json
+    File.open('people.json', 'w') { |file| file.write(JSON.generate(@peoples.map(&:to_h))) }
+  end
+  
+  def save_rentals_to_json
+    File.open('rentals.json', 'w') { |file| file.write(JSON.generate(get_rentals_data)) }
+  end
+  
+  def get_rentals_data
+    @peoples.flat_map { |people| people.rentals.map(&:to_h) }
   end
 end
