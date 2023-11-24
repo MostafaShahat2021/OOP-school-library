@@ -93,12 +93,18 @@ class App
   end
 
   def load_people_from_json
-    people_data = begin
-      JSON.parse(File.read('people.json'))
-    rescue StandardError
-      []
-    end
+    people_data = JSON.parse(File.read('people.json')) rescue []
     @peoples = people_data.map { |data| create_person_from_data(data) }
+    assign_correct_ids
+  end
+
+  def assign_correct_ids
+    highest_id = @peoples.map(&:id).max || 0
+
+    @peoples.each do |people|
+      people.id = highest_id + 1 if people.id.nil? || people.id.zero?
+      highest_id = people.id if people.id > highest_id
+    end
   end
 
   def create_person_from_data(data)
