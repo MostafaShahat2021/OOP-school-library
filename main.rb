@@ -7,6 +7,7 @@ require_relative 'rental_handler'
 class MainApp
   def initialize
     @app = App.new
+    @app.load_data_from_json
     @people_handler = PeopleHandler.new(@app)
     @menu_handler = MenuHandler.new(@app, @people_handler)
     @book_handler = BookHandler.new(@app)
