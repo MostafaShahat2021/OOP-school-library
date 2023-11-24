@@ -127,7 +127,10 @@ class App
   end
 
   def create_rental_from_data(data)
-    book = @books[data['book_index']]
+    book_index = data['book_index']
+    return unless book_index
+
+    book = @books[book_index.to_i]
     person = @peoples.find { |people| people.id == data['person_id'] }
     Rental.new(book, person, data['date'])
   end
