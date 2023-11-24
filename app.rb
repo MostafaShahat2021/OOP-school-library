@@ -80,43 +80,51 @@ class App
   end
 
   def load_books_from_json
-    books_data = JSON.parse(File.read('books.json')) rescue []
+    books_data = begin
+      JSON.parse(File.read('books.json'))
+    rescue StandardError
+      []
+    end
     @books = books_data.map { |data| create_book_from_data(data) }
   end
-  
+
   def create_book_from_data(data)
     Book.new(data['title'], data['author'])
   end
-  
+
   def load_people_from_json
-    people_data = JSON.parse(File.read('people.json')) rescue []
+    people_data = begin
+      JSON.parse(File.read('people.json'))
+    rescue StandardError
+      []
+    end
     @peoples = people_data.map { |data| create_person_from_data(data) }
   end
-  
+
   def create_person_from_data(data)
     case data['type']
-    when 'Teacher' then Teacher.new(data['age'], data['specialization'], name: data['name'], parent_permission: data['parent_permission'])
+    when 'Teacher' then Teacher.new(data['age'], data['specialization'], name: data['name'],
+                                                                         parent_permission: data['parent_permission'])
     when 'Student' then Student.new(data['age'], name: data['name'], parent_permission: data['parent_permission'])
     else raise "Invalid person type: #{data['type']}"
     end
   end
-  
+
   def load_rentals_from_json
-    begin
-      rentals_data = JSON.parse(File.read('rentals.json')) rescue []
-      rentals_data.each_with_index do |data, index|
-        begin
-          create_rental_from_data(data)
-        rescue StandardError => e
-          puts "Error loading rental at index #{index}: #{e.message}"
-          puts "Data at index #{index}: #{data.inspect}"
-        end
-      end
-    rescue StandardError => e
-      puts "Error loading rentals: #{e.message}"
+    rentals_data = begin
+      JSON.parse(File.read('rentals.json'))
+    rescue StandardError
+      []
     end
+    rentals_data.each_with_index do |data, index|
+      create_rental_from_data(data)
+    rescue StandardError => e
+      puts "Error loading rental at index #{index}: #{e.message}"
+      puts "Data at index #{index}: #{data.inspect}"
+    end
+  rescue StandardError => e
+    puts "Error loading rentals: #{e.message}"
   end
-  
 
   def create_rental_from_data(data)
     book = @books[data['book_index']]
@@ -135,21 +143,21 @@ class App
     save_people_to_json
     save_rentals_to_json
   end
-  
+
   def save_books_to_json
-    books_data = @books.map { |book| { "title" => book.title, "author" => book.author } }
-    File.open('books.json', 'w') { |file| file.write(JSON.generate(books_data)) }
-  end  
-  
+    books_data = @books.map { |book| { 'title' => book.title, 'author' => book.author } }
+    File.write('books.json', JSON.generate(books_data))
+  end
+
   def save_people_to_json
-    File.open('people.json', 'w') { |file| file.write(JSON.generate(@peoples.map(&:to_h))) }
+    File.write('people.json', JSON.generate(@peoples.map(&:to_h)))
   end
-  
+
   def save_rentals_to_json
-    File.open('rentals.json', 'w') { |file| file.write(JSON.generate(get_rentals_data)) }
+    File.write('rentals.json', JSON.generate(getrentals_data))
   end
-  
-  def get_rentals_data
+
+  def getrentals_data
     @peoples.flat_map { |people| people.rentals.map(&:to_h) }
   end
 end
