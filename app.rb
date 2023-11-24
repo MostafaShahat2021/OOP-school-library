@@ -33,7 +33,9 @@ class App
     title = gets.chomp
     puts 'Author of the book'
     author = gets.chomp
-    @books << Book.new(title, author)
+    # @books << Book.new(title, author)
+    book = Book.new(title, author)
+    @books << book
   end
 
   def create_rental
