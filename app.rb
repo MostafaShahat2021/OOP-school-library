@@ -69,12 +69,63 @@ class App
     end
   end
 
+  def load_data_from_json
+    load_books_from_json
+    load_people_from_json
+    load_rentals_from_json
+  end
+  
+  def load_books_from_json
+    books_data = JSON.parse(File.read('books.json')) rescue []
+    @books = books_data.map { |data| create_book_from_data(data) }
+  end
+  
+  def create_book_from_data(data)
+    Book.new(data['title'], data['author'])
+  end  
+  
+  def load_people_from_json
+    people_data = JSON.parse(File.read('people.json')) rescue []
+    @peoples = people_data.map { |data| create_person_from_data(data) }
+  end
+  
+  def create_person_from_data(data)
+    case data['type']
+    when 'Teacher' then Teacher.new(data['age'], data['specialization'], name: data['name'], parent_permission: data['parent_permission'])
+    when 'Student' then Student.new(data['age'], name: data['name'], parent_permission: data['parent_permission'])
+    else raise "Invalid person type: #{data['type']}"
+    end
+  end
+  
+  def load_rentals_from_json
+    begin
+      rentals_data = JSON.parse(File.read('rentals.json')) rescue []
+      rentals_data.each_with_index do |data, index|
+        begin
+          create_rental_from_data(data)
+        rescue StandardError => e
+          puts "Error loading rental at index #{index}: #{e.message}"
+          puts "Data at index #{index}: #{data.inspect}"
+        end
+      end
+    rescue StandardError => e
+      puts "Error loading rentals: #{e.message}"
+    end
+  end
+  
+
+  def create_rental_from_data(data)
+    book = @books[data['book_index']]
+    person = @peoples.find { |people| people.id == data['person_id'] }
+    Rental.new(book, person, data['date'])
+  end
+
   def exit_app
     save_data_to_json
     puts 'Exiting the application. Goodbye!'
     exit
   end
-  
+
   def save_data_to_json
     save_books_to_json
     save_people_to_json
