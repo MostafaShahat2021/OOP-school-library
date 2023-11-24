@@ -94,17 +94,33 @@ class App
 
   def load_people_from_json
     people_data = JSON.parse(File.read('people.json')) rescue []
-    @peoples = people_data.map { |data| create_person_from_data(data) }
-    assign_correct_ids
-  end
-
-  def assign_correct_ids
-    highest_id = @peoples.map(&:id).max || 0
-
-    @peoples.each do |people|
-      people.id = highest_id + 1 if people.id.nil? || people.id.zero?
-      highest_id = people.id if people.id > highest_id
+    loaded_people = people_data.map { |data| create_person_from_data(data) }
+  
+    # Use a hash to store mapping between old and new IDs
+    id_mapping = {}
+  
+    loaded_people.each do |loaded_person|
+      existing_person = @peoples.find { |p| p.name == loaded_person.name }
+      if existing_person
+        # Assign the existing ID to the loaded person
+        loaded_person.id = existing_person.id
+      else
+        # Use the loaded ID or generate a new one
+        loaded_person.id ||= Random.rand(1..1000)
+      end
+  
+      # Store the mapping
+      id_mapping[loaded_person.id] ||= loaded_person.id
     end
+  
+    # Update the IDs of the loaded rentals to use the new IDs
+    loaded_people.each do |loaded_person|
+      loaded_person.rentals.each do |rental|
+        rental.person.id = id_mapping[rental.person.id] || rental.person.id
+      end
+    end
+  
+    @peoples += loaded_people
   end
 
   def create_person_from_data(data)
@@ -117,29 +133,42 @@ class App
   end
 
   def load_rentals_from_json
-    rentals_data = begin
-      JSON.parse(File.read('rentals.json'))
-    rescue StandardError
-      []
-    end
-    rentals_data.each_with_index do |data, index|
-      create_rental_from_data(data)
+    begin
+      rentals_data = JSON.parse(File.read('rentals.json')) rescue []
+      rentals_data.each_with_index do |data, index|
+        begin
+          create_rental_from_data(data)
+        rescue StandardError => e
+          puts "Error loading rental at index #{index}: #{e.message}"
+          puts "Data at index #{index}: #{data.inspect}"
+        end
+      end
     rescue StandardError => e
-      puts "Error loading rental at index #{index}: #{e.message}"
-      puts "Data at index #{index}: #{data.inspect}"
+      puts "Error loading rentals: #{e.message}"
     end
-  rescue StandardError => e
-    puts "Error loading rentals: #{e.message}"
   end
 
   def create_rental_from_data(data)
-    book_index = data['book_index']
-    return unless book_index
-
-    book = @books[book_index.to_i]
-    person = @peoples.find { |people| people.id == data['person_id'] }
-    Rental.new(book, person, data['date'])
+    book_index = data['book_index'].to_i
+  
+    # Ensure the book index is valid
+    if book_index >= 0 && book_index < @books.length
+      book = @books[book_index]
+      person_id = data['person_id']
+      person = @peoples.find { |people| people.id == person_id }
+  
+      if book && person
+        Rental.new(book, person, data['date'])
+      else
+        puts "Error creating rental: Book or person not found. Data: #{data.inspect}"
+        nil
+      end
+    else
+      puts "Error creating rental: Invalid book index. Data: #{data.inspect}"
+      nil
+    end
   end
+  
 
   def exit_app
     save_data_to_json
