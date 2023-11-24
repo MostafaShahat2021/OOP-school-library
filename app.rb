@@ -11,7 +11,7 @@ class App
   end
 
   def list_all_books
-    puts @books.inspect
+    # puts @books.inspect
     @books.each { |book| puts "Name:- #{book.title} Author:- #{book.author} \n" }
   end
 
